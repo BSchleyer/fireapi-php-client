@@ -19,26 +19,26 @@ namespace fireapi\Handlers;
 use fireapi\Exception\AssertNotImplemented;
 use fireapi\fireapi;
 
-class AccountHandler {
+class AccountHandler
+{
 
     private $fireapi;
 
-    public function __construct(fireapi $fireapi) {
+    public function __construct(fireapi $fireapi)
+    {
         $this->fireapi = $fireapi;
     }
 
-    /**
-     * Get all api requests for the given account
-     *
-     * @return array|string
-     * @throws AssertNotImplemented
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getRequests() {
-        if($this->fireapi->isSandbox() === true) {
+    public function getRequests()
+    {
+        if ($this->fireapi->isSandbox() === true) {
             throw new AssertNotImplemented();
         }
 
-        return $this->fireapi->get('account/requests');
+        return $this->fireapi->post('account/requests');
+    }
+
+    public function getOTP() {
+        return $this->fireapi->post('account/otp');
     }
 }

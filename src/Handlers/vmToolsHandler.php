@@ -17,70 +17,43 @@
 namespace fireapi\Handlers;
 
 use fireapi\fireapi;
+use fireapi\Exception\AssertNotImplemented;
 
-class vmToolsHandler {
+class vmToolsHandler
+{
 
     private $fireapi;
 
-    public function __construct(fireapi $fireapi) {
+    public function __construct(fireapi $fireapi)
+    {
         $this->fireapi = $fireapi;
     }
 
     /*
      * ISO section
      */
-
-    /**
-     * Set the vm a specified iso
-     *
-     * @param int $vm_id
-     * @param $iso
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function setIso($vm_id, $iso) {
+    public function setIso($vm_id, $iso)
+    {
         return $this->fireapi->put('vm/' . $vm_id . '/iso', [
             'iso' => $iso
         ]);
     }
 
-    /**
-     * Remove the vm a specified iso
-     *
-     * @param int $vm_id
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function removeISO($vm_id) {
+    public function removeISO($vm_id)
+    {
         return $this->fireapi->delete('vm/' . $vm_id . '/iso');
     }
 
     /*
      * DDOS section
      */
-
-    /**
-     * get the ddos settings
-     *
-     * @param int $vm_id
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getDDOS($vm_id) {
+    public function getDDOS($vm_id)
+    {
         return $this->fireapi->get('vm/' . $vm_id . '/ddos');
     }
 
-    /**
-     * set the ddos settings
-     *
-     * @param int $vm_id
-     * @param $layer4
-     * @param $layer7
-     * @param $ip_address
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function setDDOS($vm_id, $layer4, $layer7, $ip_address) {
+    public function setDDOS($vm_id, $layer4, $layer7, $ip_address)
+    {
         return $this->fireapi->post('vm/' . $vm_id . '/ddos', [
             'layer4' => $layer4,
             'layer7' => $layer7,
@@ -91,80 +64,41 @@ class vmToolsHandler {
     /*
      * Backup section
      */
-
-    /**
-     * get all backups of the vm
-     *
-     * @param int $vm_id
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getBackupList($vm_id) {
+    public function getBackupList($vm_id)
+    {
         return $this->fireapi->get('vm/' . $vm_id . '/backup/list');
     }
 
-    /**
-     * create a new backup of the given vm
-     *
-     * @param int $vm_id
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function createBackup($vm_id) {
-        return $this->fireapi->post('vm/' . $vm_id . '/backup/create');
+    public function createBackup($vm_id, $description)
+    {
+        return $this->fireapi->post('vm/' . $vm_id . '/backup/create', [
+            'description' => $description
+        ]);
     }
 
-    /**
-     * get the status of the backup, where creating from a given vm
-     *
-     * @param int $vm_id
-     * @param $backup_id
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getBackupStatus($vm_id, $backup_id) {
+    public function getBackupStatus($vm_id, $backup_id)
+    {
         return $this->fireapi->get('vm/' . $vm_id . '/backup/create/status', [
             'backup_id' => $backup_id
         ]);
     }
 
-    /**
-     * restore a backup for the given vm
-     *
-     * @param int $vm_id
-     * @param $backup_id
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function restoreBackup($vm_id, $backup_id) {
+    public function restoreBackup($vm_id, $backup_id)
+    {
         return $this->fireapi->post('vm/' . $vm_id . '/backup/restore', [
             'backup_id' => $backup_id
         ]);
     }
 
-    /**
-     * status of a restore backup
-     *
-     * @param int $vm_id
-     * @param $backup_id
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function restoreBackupStatus($vm_id, $backup_id) {
+    public function restoreBackupStatus($vm_id, $backup_id)
+    {
         return $this->fireapi->post('vm/' . $vm_id . '/backup/restore/status', [
             'backup_id' => $backup_id
         ]);
     }
 
-    /**
-     * Delete a backup from the given vm
-     *
-     * @param int $vm_id
-     * @param $backup_id
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function deleteBackup($vm_id, $backup_id) {
+    public function deleteBackup($vm_id, $backup_id)
+    {
         return $this->fireapi->delete('vm/' . $vm_id . '/backup/delete', [
             'backup_id' => $backup_id
         ]);
@@ -173,95 +107,144 @@ class vmToolsHandler {
     /*
      * List section
      */
-
-    /**
-     * get all vms from your account
-     *
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getAllVMs() {
+    public function getAllVMs()
+    {
         return $this->fireapi->get('vm/list');
     }
 
-    /**
-     * Get all Hostsystems available for vm creation
-     * (with information, example hardware, etc.)
-     *
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getHosts() {
+    public function getHosts()
+    {
         return $this->fireapi->get('vm/list/hosts');
     }
 
-    /**
-     * Get a List of all available os
-     *
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getOSList() {
+    public function getOSList()
+    {
         return $this->fireapi->get('vm/list/os');
     }
 
-    /**
-     * Get a List of all available iso files
-     *
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getISOList() {
+    public function getISOList()
+    {
         return $this->fireapi->get('vm/list/iso');
     }
 
-    /**
-     * Get a List of all abuse reports
-     *
-     * @param int $vm_id
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
+    /*
+     * Monitoring section
      */
-    public function getAbuseReports($vm_id) {
-        return $this->fireapi->get('vm/' . $vm_id . '/abuses');
+
+    public function changeMonitoring($vm_id, $enabled, $port)
+    {
+        return $this->fireapi->post('vm/' . $vm_id . '/monitoring/change', ['enabled' => $enabled, 'port' => $port]);
     }
 
-    /**
-     * Get a List of monitoring measurements#
-     *
-     * @param int $vm_id
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getMonitoringMeasurements($vm_id) {
+    public function getTimings($vm_id)
+    {
         return $this->fireapi->get('vm/' . $vm_id . '/monitoring/timings');
     }
 
-    /**
-     * Get a List of monitoring outages
-     *
-     * @param int $vm_id
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getMonitoringOutages($vm_id) {
+    public function getIncidents($vm_id)
+    {
         return $this->fireapi->get('vm/' . $vm_id . '/monitoring/incidences');
     }
 
-    /**
-     * Change the monitoring settings
-     *
-     * @param int $vm_id
-     * @param boolean $enabled
-     * @param int $port
-     * @return array|string
-     * @throws \GuzzleHttp\Exception\GuzzleException
+    /*
+     * Abuse section
      */
-    public function changeMonitoringSettings($vm_id, $enabled, $port = 22) {
-        return $this->fireapi->post('vm/' . $vm_id . '/monitoring/change', [
-            'enabled' => $enabled,
-            'port' => $port
+    public function getAbuses($vm_id)
+    {
+        return $this->fireapi->get('vm/' . $vm_id . '/abuses');
+    }
+
+    /*
+     * Traffic section
+     */
+    public function getTrafficUsage($vm_id)
+    {
+        return $this->fireapi->get('vm/' . $vm_id . '/traffic/current');
+    }
+
+    public function getTrafficLog($vm_id)
+    {
+        return $this->fireapi->post('vm/' . $vm_id . '/traffic/current/log');
+    }
+
+    public function getTrafficLogChart($vm_id, array $parameter, $size = '900x300')
+    {
+        return $this->fireapi->post('vm/' . $vm_id . '/traffic/chart', [
+            'type' => $parameter['type'],
+            'summary' => $parameter['summery'],
+            'output' => $parameter['output'],
+            'dataset_in_label' => (string) $parameter['dataset_in_label'],
+            'dataset_out_label' => (string)  $parameter['dataset_out_label'],
+            'dataset_in_color' => (string) $parameter['dataset_in_color'],
+            'dataset_out_color' => (string) $parameter['dataset_out_color'],
+            'axes_y_label' => (string) $parameter['axes_y_label'],
+            'datapoints' => (int) $parameter['datapoints'],
+            'size' => (string) $size
         ]);
     }
 
+    public function getTrafficAddons($vm_id)
+    {
+        return $this->fireapi->get('vm/' . $vm_id . '/traffic/addons');
+    }
+
+    public function buyTrafficAddon($vm_id, $addon)
+    {
+        return $this->fireapi->post('vm/' . $vm_id . '/traffic/addons/buy', [
+            'addon' => $addon
+        ]);
+    }
+
+    /*
+     * SSH-key section
+     */
+    public function getAllSSHKeys($vm_id)
+    {
+        return $this->fireapi->get('vm/' . $vm_id . '/sshkey/list');
+    }
+
+    public function generateSSHKey($vm_id, $displayname)
+    {
+        return $this->fireapi->post('vm/' . $vm_id . '/sshkey/generate', [
+            'displayname' => $displayname
+        ]);
+    }
+
+    public function loadSSHKey($vm_id, $public_key, $displayname)
+    {
+        return $this->fireapi->post('vm/' . $vm_id . '/sshkey/upload', [
+            'public_key' => $public_key,
+            'displayname' => $displayname
+        ]);
+    }
+
+    public function removeSSHKey($vm_id, $key_id)
+    {
+        return $this->fireapi->delete('vm/' . $vm_id . '/sshkey/remove', [
+            'key_id' => $key_id
+        ]);
+    }
+
+    /*
+     * rDNS section
+     */
+    public function getAllRDNS($vm_id)
+    {
+        return $this->fireapi->get('vm/' . $vm_id . '/rdns/list');
+    }
+
+    public function setRDNS($vm_id, $ip_address, $ptr, $note = null)
+    {
+        return $this->fireapi->put('vm/' . $vm_id . '/rdns/create', [
+            'ip_address' => $ip_address,
+            'ptr' => $ptr,
+            'note' => $note
+        ]);
+    }
+
+    public function deleteRDNS($vm_id, $ip_address) {
+        return $this->fireapi->delete('vm/' . $vm_id . '/rdns/delete', [
+            'ip_address' => $ip_address
+        ]);
+    }
 }
